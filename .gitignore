@@ -1,0 +1,10 @@
+.env
+.env.*
+!.env.example
+venv/
+__pycache__/
+*.pyc
+smartfoot.db
+*.db
+# Private API documentation
+Rapport/api.txt

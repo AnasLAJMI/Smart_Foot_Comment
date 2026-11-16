@@ -1,0 +1,102 @@
+# SmartFoot AI – الملخص التقني لعمل اليوم
+## التاريخ: 16 نوفمبر 2026
+
+### 1. التقنيات (Technologies)
+
+**Python 3.14.7**
+- لغة البرمجة الرئيسية للمشروع.
+- استخدمناها لتطوير Backend.
+
+**FastAPI**
+- إطار عمل Python لإنشاء REST API.
+- إنشاء Endpoints لاستقبال وإرسال البيانات.
+- يوفر توثيقاً تلقائياً للـ API.
+
+**Uvicorn**
+- ASGI Server لتشغيل تطبيق FastAPI.
+- استخدمنا الأمر:
+  python -m uvicorn backend.app.main:app --reload
+- الخيار --reload يعيد تشغيل الخادم تلقائياً عند تعديل الملفات.
+
+**SQLite**
+- نظام إدارة قواعد بيانات خفيف.
+- استخدمناه لتخزين بيانات المباريات.
+- قاعدة البيانات: smartfoot.db
+
+**SQLite3**
+- مكتبة Python للتعامل مع SQLite.
+- استخدمناها لتنفيذ SQL Queries.
+
+**Pydantic**
+- مكتبة للتحقق من صحة البيانات (Data Validation).
+- استخدمنا BaseModel و Field.
+- حددنا أن قيمة minute يجب أن تكون بين 0 و130.
+
+**Swagger UI**
+- واجهة تفاعلية لاختبار REST API.
+- الرابط: http://127.0.0.1:8000/docs
+
+---
+
+### 2. بنية Backend
+
+أنشأنا بنية تعتمد على فصل المسؤوليات:
+
+backend/
+    app/
+        main.py
+        schemas/
+            match.py
+        database/
+            connection.py
+        services/
+            match_service.py
+
+**main.py**
+- يحتوي على FastAPI Application.
+- يحتوي على API Endpoints.
+- يستقبل طلبات HTTP ويرجع Responses.
+
+**schemas/match.py**
+- يحتوي على نموذج MatchCreate.
+- يحدد الحقول المطلوبة للمباراة:
+  home_team
+  away_team
+  competition
+  minute
+
+**database/connection.py**
+- مسؤول عن الاتصال بقاعدة SQLite.
+- يحتوي على دالة get_connection().
+- يحتوي على دالة create_tables() لإنشاء جدول matches.
+
+**services/match_service.py**
+- يحتوي على منطق التعامل مع قاعدة البيانات.
+- يفصل Database Operations عن API Endpoints.
+
+---
+
+### 3. عمليات CRUD
+
+CRUD تعني:
+Create – Read – Update – Delete
+
+أنشأنا واختبرنا العمليات التالية:
+
+1. CREATE – إضافة مباراة
+HTTP Method: POST
+Endpoint: /matches
+Function: save_match()
+
+2. READ ALL – عرض جميع المباريات
+HTTP Method: GET
+Endpoint: /matches
+Function: get_matches()
+
+3. READ ONE – البحث عن مباراة حسب ID
+HTTP Method: GET
+Endpoint: /matches/{match_id}
+Function: get_match_by_id()
+
+4. UPDATE – تعديل مباراة
+HTTP Method:
